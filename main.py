@@ -6,8 +6,8 @@ from settings import bot_token
 
 # вспомогательные процедуры
 # подключение и запрос данных у бота
-def get_bot_updates(offset=None):
-    params = {'offset': offset}
+def get_bot_updates(offset=None, timeout=30):
+    params = {'offset': offset, 'timeout': timeout}
     # получаем ответ от АПИ
     api_response = requests.get(bot_token + 'getUpdates', params)
     # превращаем в JSON объект
@@ -28,30 +28,25 @@ def main_module():
     while True:
         # получаем обновления от бота
         result = get_bot_updates(newoffset)
-        if len(result) > 0: # если есть что-то новое, то работаем дальше. Если нет - в конец вайла. Спим и курим.
-
-            # тут будет цикл, ели вдруг больше одного сообщения прилетело. Но пока работаем с одним - посленим. 
-            # берем контакты последнего кто обращался
-            last_update_id = result[-1]['update_id']
-            last_chat_text = result[-1]['message']['text']
-            last_chat_id = result[-1]['message']['chat']['id']
-            last_chat_name = result[-1]['message']['chat']['first_name']
+        for res_upd in result: # если есть что-то новое, то работаем дальше. Если нет - в конец вайла. Спим и курим.
+            # берем контакты и данные из апдейта
+            last_update_id = res_upd['update_id']
+            last_chat_text = res_upd['message']['text']
+            last_chat_id = res_upd['message']['chat']['id']
+            last_chat_name = res_upd['message']['chat']['first_name']
             
             # реакция на сообщение
-            answer_text = last_chat_name + ', ты сказал: ' + last_chat_text + '   '
+            answer_text = last_chat_name + ', ты сказал: ' + last_chat_text
             send_answer(last_chat_id, answer_text)
             
             # отладочный принт в консоль
             print(newoffset, "  = newoffset = last_update_id   ", last_chat_text)
+
             # закончили общаться с пользователем. Обновляем оффсет, идём на новый заход вайла
             newoffset = last_update_id + 1
 
-        # солдат спит, служба идёт
-        time.sleep(2)
-        # отладочный принт в консоль
-        print("  Ничё нового нет, переменные не трогаю, сижу, курю, жду апдейтов   ")
-
-
+        # "солдат спит, служба идёт" отладочный принт в консоль
+        print(" Фор-ин отработал или прошло 30 секунд. В любо случае ничё нового нет, переменные не трогаю, сижу, курю, жду апдейтов   ")
 
 if __name__ == '__main__':  
     try:
