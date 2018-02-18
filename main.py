@@ -67,15 +67,29 @@ def main_module():
         # получаем обновления от бота
         results = get_bot_updates(newoffset)
         for result in results: 
-        # если есть что-то новое, то работаем дальше. Если нет - в конец вайла.
+            # если есть что-то новое, то работаем дальше. Если нет - в конец вайла.
             # берем контакты и данные из апдейта
+
+            # проверка на редактирование
+            if 'edited_message' in result:
+                Neo = result['edited_message']['chat']['first_name']
+                now = datetime.datetime.now()
+                print('{}  *** {} пытался сломать матрицу! ***'.format(now.strftime('%b. %d, %H:%M:%S'), Neo))
+                last_chat_id = result['edited_message']['chat']['id']
+                answer_text = ('Ваша запись уже была внесена в блокчейн. Исправления невозможны!')
+                send_answer(last_chat_id, answer_text)
+                newoffset = result['update_id'] + 1
+                continue
+
+            # работа с текстом
             last_update_id = result['update_id']
             last_chat_id = result['message']['chat']['id']
             last_chat_name = result['message']['chat']['first_name']
-            last_msg_date = datetime.datetime.fromtimestamp(result['message']['date']).strftime('%b. %d, %H:%M')
+            last_msg_date = datetime.datetime.fromtimestamp(\
+            result['message']['date']).strftime('%b. %d, %H:%M:%S')
 
             # Отлавливаем всякие смайлы и репосты, где нет текста
-            # и делаем костыль - добавляем капельку текста
+            # и делаем костыль - добавляем капельку текста            
             try:
                 last_chat_text = result['message']['text']
             except KeyError:
@@ -116,17 +130,19 @@ def main_module():
             # потом нужно будет научиться в файл писать логи
             now = datetime.datetime.now()
             print('{}  {}: {}'.format(last_msg_date, last_chat_name, last_chat_text))
-            print('{}  tuzemun: {}'.format(now.strftime('%b. %d, %H:%M'), answer_text))
+            print('{}  tuzemun: {}'.format(now.strftime('%b. %d, %H:%M:%S'), answer_text))
             
             # Вопрос-ответ отработаны. Обновляем оффсет, идём на новый заход вайла
             newoffset = last_update_id + 1
 
 # Закончились вспомогательные модули - Стартуем!
+
+
 # Формируем словарь для пар
 coins_rate = {'btc-usd': None, 'eth-usd': None, 'btc-rub': None, 'eth-rub': None, 
 'timestamp': 0}
 
-# запрашиваем актальный курс
+# запрашиваем актуальный курс
 coins_rate = get_coins_rate() 
 
 if __name__ == '__main__':  
