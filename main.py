@@ -1,6 +1,7 @@
 import requests
 import time
 import random
+import datetime
 from token_key import bot_token
 from settings import *
 
@@ -33,7 +34,7 @@ def get_coins_rate():
     # временная отметка получения данных
     coins_rate['timestamp'] = time.time() 
     # отладочный принт в консоль
-    print("Крипта обновилась")
+    print("\nSystem Message - Обновили цены\n")
     return coins_rate
 
 # подключение и запрос данных у бота
@@ -61,7 +62,7 @@ def num_format(coins_rate, pair):
 
 # Самый Главный Модуль
 def main_module():
-    newoffset = 891606883
+    newoffset = None
     while True:
         # получаем обновления от бота
         results = get_bot_updates(newoffset)
@@ -71,8 +72,10 @@ def main_module():
             last_update_id = result['update_id']
             last_chat_id = result['message']['chat']['id']
             last_chat_name = result['message']['chat']['first_name']
+            last_msg_date = datetime.datetime.fromtimestamp(result['message']['date']).strftime('%b. %d, %H:%M')
 
             # Отлавливаем всякие смайлы и репосты, где нет текста
+            # и делаем костыль - добавляем капельку текста
             try:
                 last_chat_text = result['message']['text']
             except KeyError:
@@ -111,8 +114,9 @@ def main_module():
 
             # дублируем переписку в консоль, надо же знать о чём он там и с кем говорит
             # потом нужно будет научиться в файл писать логи
-            print('{}: {}'.format(last_chat_name, last_chat_text))
-            print('Бот: {}'.format(answer_text))
+            now = datetime.datetime.now()
+            print('{}  {}: {}'.format(last_msg_date, last_chat_name, last_chat_text))
+            print('{}  tuzemun: {}'.format(now.strftime('%b. %d, %H:%M'), answer_text))
             
             # Вопрос-ответ отработаны. Обновляем оффсет, идём на новый заход вайла
             newoffset = last_update_id + 1
