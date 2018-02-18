@@ -90,9 +90,11 @@ def main_module():
                 txt = num_format(coins_rate, 'eth-usd')
                 answer_text = ('{} $ за 1 эфир'.format(txt.replace('.', ',')))
             elif last_chat_text == '/btcrub':
+                coins_rate = get_coins_rate()
                 txt = num_format(coins_rate, 'btc-rub')
                 answer_text = ('{} ₽ за 1 биткойн'.format(txt.replace('.', ',')))
             elif last_chat_text == '/ethrub':
+                coins_rate = get_coins_rate()
                 txt = num_format(coins_rate, 'eth-rub')
                 answer_text = ('{} ₽ за 1 эфир'.format(txt.replace('.', ',')))
             elif last_chat_text == '/signal':
@@ -102,7 +104,7 @@ def main_module():
                 random.choice(act_1), random.choice(act_2), random.choice(coins)))
             else:
                 answer_text = (last_chat_name + ', я не понимаю по клингонски.'
-                '\nНапиши /start и я расскажу тебе, что умею')
+                '\nНапиши /start и я расскажу тебе, что я умею')
 
             # отправляем ответ
             send_answer(last_chat_id, answer_text)
