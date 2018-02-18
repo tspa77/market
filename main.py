@@ -19,14 +19,14 @@ def get_coins_rate():
 
 # обновление всех пар и отметки времени в словаре
 def coins_to_dict(pair):
-    if pair != 'timestamp':
+    if pair == 'timestamp':
+        coins_rate['timestamp'] = time.time()
+    else:
         # получаем ответ от АПИ
         api_response = requests.get(exchange_url + pair)
         # превращаем в JSON объект
         json_response = api_response.json()
         coins_rate[pair] = json_response
-    else:
-        coins_rate['timestamp'] = time.time() 
 
 # подключение и запрос данных у бота
 def get_bot_updates(offset=None, timeout=30):
