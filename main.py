@@ -50,6 +50,35 @@ def num_format(coins_rate, pair):
     txt = '{0:,}'.format(txt).replace(',', ' ')
     return txt
 
+# реакция на сообщение, выбор ответа
+def choice_answer(last_chat_text, last_chat_name):
+    if last_chat_text in answers_with_request:
+        coins_rate = get_coins_rate()
+        if last_chat_text == '/btcusd':
+            txt = num_format(coins_rate, 'btc-usd')
+            answer_text = ('{} $ за 1 биткойн'.format(txt.replace('.', ',')))
+        elif last_chat_text == '/ethusd':
+            txt = num_format(coins_rate, 'eth-usd')
+            answer_text = ('{} $ за 1 эфир'.format(txt.replace('.', ',')))
+        elif last_chat_text == '/btcrub':
+            txt = num_format(coins_rate, 'btc-rur')
+            answer_text = ('{} ₽ за 1 биткойн'.format(txt.replace('.', ',')))
+        elif last_chat_text == '/ethrub':
+            txt = num_format(coins_rate, 'eth-rur')
+            answer_text = ('{} ₽ за 1 эфир'.format(txt.replace('.', ',')))
+    elif last_chat_text in answers_wo_request:
+        if last_chat_text == '/start':
+            answer_text = starttext
+        elif last_chat_text == '/signal':
+            answer_text = ('С вашего счёта списано 1000 рублей. Рекомендация:'
+            '\n{} в созвездии {}. Ведущие астрологи {} {} {} '
+            ''.format(random.choice(planets), random.choice(zodiac), \
+            random.choice(act_1), random.choice(act_2), random.choice(coins)))
+    else:
+        answer_text = (last_chat_name + ', я не понимаю по клингонски.'
+        '\nНапиши /start и я расскажу тебе, что я умею')
+    return answer_text
+
 
 # Самый Главный Модуль
 def main_module():
@@ -70,50 +99,26 @@ def main_module():
                 send_answer(last_chat_id, answer_text)
                 newoffset = result['update_id'] + 1
                 continue
-
+            
             # работа с текстом
             last_update_id = result['update_id']
             last_chat_id = result['message']['chat']['id']
             last_chat_name = result['message']['chat']['first_name']
             last_msg_date = datetime.datetime.fromtimestamp(\
             result['message']['date']).strftime('%b. %d, %H:%M:%S')
-
+            
             # Отлавливаем всякие смайлы и репосты, где нет текста
             try:
                 last_chat_text = result['message']['text']
             except KeyError:
                 last_chat_text = ' '
             
-            # реакция на сообщение
-            if last_chat_text in answers_with_request:
-                coins_rate = get_coins_rate()
-                if last_chat_text == '/btcusd':
-                    txt = num_format(coins_rate, 'btc-usd')
-                    answer_text = ('{} $ за 1 биткойн'.format(txt.replace('.', ',')))
-                elif last_chat_text == '/ethusd':
-                    txt = num_format(coins_rate, 'eth-usd')
-                    answer_text = ('{} $ за 1 эфир'.format(txt.replace('.', ',')))
-                elif last_chat_text == '/btcrub':
-                    txt = num_format(coins_rate, 'btc-rur')
-                    answer_text = ('{} ₽ за 1 биткойн'.format(txt.replace('.', ',')))
-                elif last_chat_text == '/ethrub':
-                    txt = num_format(coins_rate, 'eth-rur')
-                    answer_text = ('{} ₽ за 1 эфир'.format(txt.replace('.', ',')))
-            elif last_chat_text in answers_wo_request:
-                if last_chat_text == '/start':
-                    answer_text = starttext
-                elif last_chat_text == '/signal':
-                    answer_text = ('С вашего счёта списано 1000 рублей. Рекомендация:'
-                    '\n{} в созвездии {}. Ведущие астрологи {} {} {} '
-                    ''.format(random.choice(planets), random.choice(zodiac), \
-                    random.choice(act_1), random.choice(act_2), random.choice(coins)))
-            else:
-                answer_text = (last_chat_name + ', я не понимаю по клингонски.'
-                '\nНапиши /start и я расскажу тебе, что я умею')
-
+            # реакция на сообщение, выбор ответа
+            answer_text = choice_answer(last_chat_text, last_chat_name)
+            
             # отправляем ответ
             send_answer(last_chat_id, answer_text)
-
+            
             # дублируем переписку в консоль, надо же знать о чём он там и с кем говорит
             now = datetime.datetime.now()
             print('{}  {}: {}'.format(last_msg_date, last_chat_name, last_chat_text))
