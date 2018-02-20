@@ -24,8 +24,14 @@ def coins_to_dict(pair):
     else:
         # получаем ответ от АПИ
         api_response = requests.get(exchange_url + pair)
-        # превращаем в JSON объект
-        json_response = api_response.json()
+        # Защита если "там просто стоит WAF" чтобы это не значило :(
+        try:
+            # превращаем в JSON объект
+            json_response = api_response.json()
+        except :
+            # если облом и "он тебе сетит куки" (?!?) вызываем родительскую
+            # функцию и опять попадаем сюда и так до посинения
+            return get_coins_rate()
         coins_rate[pair] = json_response
 
 # подключение и запрос данных у бота
@@ -49,6 +55,12 @@ def num_format(coins_rate, pair):
     txt = (float(coins_rate[pair]['ticker']['price'][:-6]))
     txt = '{0:,}'.format(txt).replace(',', ' ')
     return txt
+
+
+# def show_btc_usd():
+#     txt = num_format(coins_rate, 'btc-usd')
+#     answer_text = ('{} $ за 1 биткойн'.format(txt.replace('.', ',')))
+
 
 # реакция на сообщение, выбор ответа
 def choice_answer(last_chat_text, last_chat_name):
