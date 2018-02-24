@@ -1,7 +1,10 @@
-{% for product in products %} 
-<h3><a href={% url 'detail' product.id %}>{{product.title}}</a></h3>
-<p> Категория: <a href={% url 'prod_in_cat' product.category.id %}>{{product.category}}</a></p>
-{% endfor %} 
+<h3>Категория "{{category.title}}"</h3>
+<p>Здесь вы можете найти {{category.description}}</p>
+<br>
+
+{% for product in category.products.all %}
+<p><a href={% url 'detail' product.id %}>{{product.title}}</a></p>
+{% endfor %}
 
 <br><br>
 <p>

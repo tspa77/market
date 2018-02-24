@@ -5,28 +5,14 @@ from django.urls import path
 # импортируем наш файл views из products
 from ishop import views
 
-# говорим Джанго о том, что хотим отображать наш вью на главной странице
-# а строчкой ниже, ссылка на нашу админку, про нее позже
 urlpatterns = [ 
     path('', views.IndexView.as_view(), name='index'), 
-    path('products/', views.ProductListView.as_view(), name='products'),
-    path('admin/', admin.site.urls, name='admin'), 
     path('products/<int:pk>/', views.ProductDetail.as_view(), name='detail'),
+    path('products/', views.ProductListView.as_view(), name='products'),
+    path('categorys/', views.CategoryListView.as_view(), name='categorys'),
+    path('prod_in_cat/<int:pk>/', views.ProdInCatView.as_view(), name='prod_in_cat'),
+    path('admin/', admin.site.urls, name='megaadmin'), 
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

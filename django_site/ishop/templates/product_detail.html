@@ -1,4 +1,19 @@
-<h2>{{product.title}}</h2> 
-<p>{{ product.description}}</p>
+<h2>{{product.title}}</h2>
+<p>Категория: <a href={% url 'prod_in_cat' product.category.id %}>{{product.category}}</a></p>
+<p>Описание: {{product.description}}</p>
+<p>Цена: {{product.price}} $</p>
 
-<a href="/">Вернуться на главную</a>
+<br><br>
+<p>
+Навигация по сайту:
+<a href={% url 'products' %}>    Все товары    |</a>
+<a href={% url 'categorys' %}>    Товары по категориям    |</a>
+<a href={% url 'index' %}>    Вернуться на главную</a>
+</p>
+<br>
+И пока ещё далеко да релиза, можно
+<a href={% url 'admin:index' %}> порулить админкой</a>
+
+<!-- 
+
+-->

@@ -5,7 +5,7 @@ from django.db import models
 class Product(models.Model):
     title = models.CharField(max_length=200) # и указываем максимальную длину
     description = models.TextField(max_length=5000, blank=True)
-    category = models.ForeignKey('Category', on_delete='CASCADE', null=True) 
+    category = models.ForeignKey('Category', on_delete='CASCADE', null=True, related_name='products') 
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
@@ -17,4 +17,3 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
-
