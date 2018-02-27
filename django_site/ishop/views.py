@@ -17,8 +17,8 @@ class ProductDetail(generic.DetailView):
     template_name = 'product_detail.html' 
     model = Product
 
-class ProdInCatView(generic.DetailView): 
-    template_name = 'prod_in_cat.html' 
+class OneCategoryView(generic.DetailView): 
+    template_name = 'one_category.html' 
     model = Category
 
 class ProductListView(generic.ListView): 
