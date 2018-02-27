@@ -1,0 +1,15 @@
+{% for category in categorys %} 
+<h3><a href={% url 'one_category' category.id %}>{{category.title}}</a></h3>
+<p>Описание: {{category.description}}</p>
+{% endfor %}
+
+<br><br>
+<p>
+Навигация по сайту:
+<a href={% url 'products' %}>    Все товары    |</a>
+<a href={% url 'categorys' %}>    Товары по категориям    |</a>
+<a href={% url 'index' %}>    Вернуться на главную</a>
+</p>
+<br>
+И пока ещё далеко да релиза, можно
+<a href={% url 'admin:index' %}> порулить админкой</a>
