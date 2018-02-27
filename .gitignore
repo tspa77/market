@@ -1,4 +1,11 @@
-
+# Cash VSC
 \.vscode/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Secret data
+token.key
 __pycache__
 token_key.py
