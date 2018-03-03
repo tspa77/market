@@ -1,0 +1,16 @@
+<h2>Удаляем товар из базы</h2>
+
+<p>Точно удаляем "{{ product.title }}"? Восстановление невозможно!</p>
+<br>
+Информация об удаляемом товаре:
+<h3>{{product.title}}</h3>
+<p>Категория: <a href={% url 'one_category' product.category.id %}>{{product.category}}</a></p>
+<p>Описание: {{product.description}}</p>
+<p>Цена: {{product.price}} Рублей</p>
+<br>
+{# action — ссылка куда отправляется запрос, method - метод запроса #}
+<form action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %} 
+  <input type="submit" value="Точно" />
+</form>
+

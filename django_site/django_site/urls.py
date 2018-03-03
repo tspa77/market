@@ -7,9 +7,16 @@ from ishop import views
 
 urlpatterns = [ 
     path('', views.IndexView.as_view(), name='index'), 
-    path('products/<int:pk>/', views.ProductDetail.as_view(), name='detail'),
+    path('products/<int:pk>/', views.ProductDetail.as_view(), name='product_detail'),
+    path('products/<int:pk>/order', views.OrderFormView.as_view(), name='product_order'),
+    path('products/new/', views.ProductCreate.as_view(), name='product_create'),
+    path('products/update/<int:pk>/', views.ProductUpdate.as_view(), name='product_update'),
+    path('products/delete/<int:pk>/', views.ProductDelete.as_view(), name='product_delete'),
     path('products/', views.ProductListView.as_view(), name='products'),
-    path('categorys/', views.CategoryListView.as_view(), name='categorys'),
+    path('categories/', views.CategoryListView.as_view(), name='categories'),
     path('one_category/<int:pk>/', views.OneCategoryView.as_view(), name='one_category'),
-    path('admin/', admin.site.urls, name='megaadmin'), 
+    path('admin/', admin.site.urls,), 
 ]
+
+
+

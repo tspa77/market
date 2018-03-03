@@ -1,15 +1,23 @@
-<h2>{{product.title}}</h2>
+<h2> my Shop </h2>
+<a href={% url 'products' %}>Все товары</a>
+или просмотреть товары по категориям: 
+{% for category in categories %}
+  <a href={% url 'one_category' category.id %}>{{category.title}}</a>
+{% endfor %} <br>
+
+<h3>{{product.title}}</h3>
 <p>Категория: <a href={% url 'one_category' product.category.id %}>{{product.category}}</a></p>
 <p>Описание: {{product.description}}</p>
-<p>Цена: {{product.price}} $</p>
+<p>Цена: {{product.price}} Рублей</p>
+<br>
+
+<button><a href={% url 'product_order' product.id %}>Заказать</a></button>
 
 <br><br>
-<p>
-Навигация по сайту:
-<a href={% url 'products' %}>    Все товары    |</a>
-<a href={% url 'categorys' %}>    Товары по категориям    |</a>
-<a href={% url 'index' %}>    Вернуться на главную</a>
-</p>
-<br>
+
+<button><a href={% url 'product_update' product.id %}>Отредактировать описание</a></button>
+
+<br><br>
+
 И пока ещё далеко да релиза, можно
 <a href={% url 'admin:index' %}> порулить админкой</a>

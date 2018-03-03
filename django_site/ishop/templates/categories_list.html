@@ -5,13 +5,12 @@
   <a href={% url 'one_category' category.id %}>{{category.title}}</a>
 {% endfor %} <br>
 
-<h3>Все товары: </h3>
+<h3>Товары по категориям: </h3>
 
-{% for product in products %} 
-  <h4><a href={% url 'product_detail' product.id %}>{{product.title}}</a></h4>
-  Категория: <a href={% url 'one_category' product.category.id %}>{{product.category}}</a> <br>
-{% endfor %} 
-
+{% for category in categories %} 
+  <h4><a href={% url 'one_category' category.id %}>{{category.title}}</a></h4>
+  <p>Описание: {{category.description}}</p>
+{% endfor %}
 
 <br>
 И пока ещё далеко да релиза, можно

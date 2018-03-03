@@ -1,5 +1,6 @@
 # Импортируем родительский класс моделей 
 from django.db import models
+from django.urls import reverse
 
 # Создаем базовую модель нашего продукта
 class Product(models.Model):
@@ -10,6 +11,9 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self): 
+        return reverse('product_detail', args=[str(self.id)])
 
 class Category(models.Model): 
     title = models.CharField(max_length=200)
@@ -17,3 +21,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+class Order(models.Model): 
+    product = models.ForeignKey(Product, on_delete='CASCADE') 
+    customer_name = models.CharField(max_length=200)
+    customer_phone = models.CharField(max_length=200)
+
