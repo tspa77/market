@@ -8,6 +8,16 @@ from .models import Product
 from .models import Category
 from .models import Order
 
+from django.contrib.auth.forms import UserCreationForm 
+from django.urls import reverse_lazy 
+from django.views import generic
+
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+class SignUpView(generic.CreateView): 
+    form_class = UserCreationForm 
+    success_url = reverse_lazy('login') 
+    template_name = 'signup.html'
 
 # Стандартный вью — это обычная питон-функция
 def index(request):
@@ -58,25 +68,32 @@ class CategoryListView(generic.ListView):
     context_object_name = 'categories'
     model = Category
 
-class ProductCreate(generic.CreateView): 
+class ProductCreate(UserPassesTestMixin, generic.CreateView): 
     model = Product 
     # название нашего шаблона с формой
     template_name = 'product_new.html' 
     # какие поля будут в форме 
     fields = '__all__'
+    
+    # проверяем условие, если пользователь — админ, то вернет True и пустит пользователя
+    def test_func(self): 
+        return self.request.user.is_superuser
 
-class ProductUpdate(generic.UpdateView): 
+class ProductUpdate(UserPassesTestMixin, generic.UpdateView): 
     model = Product 
     template_name = 'product_update.html' 
     fields = '__all__'
 
-class ProductDelete(generic.DeleteView): 
+    def test_func(self): 
+        return self.request.user.is_superuser
+
+class ProductDelete(UserPassesTestMixin, generic.DeleteView): 
     model = Product 
     template_name = 'product_delete.html' 
     success_url = '/products/'
-
-    #def get_success_url(self, **kwargs):
-    #    return reverse('one_category', product.category.id)
+    
+    def test_func(self): 
+        return self.request.user.is_superuser
 
 class OrderFormView(generic.CreateView): 
     model = Order 
@@ -84,10 +101,14 @@ class OrderFormView(generic.CreateView):
     success_url = '/' 
     # выведем только поля, которые нужно заполнить самому человеку
     fields = ['customer_name', 'customer_phone']
-
+    
     def form_valid(self, form):
         # получаем ID из ссылки и передаем в ORM для фильтрации
         product = Product.objects.get(id=self.kwargs['pk']) 
+        user = self.request.user
+        # передаём в заказ текущего покупателя 
+        if self.request.user.is_authenticated:
+            form.instance.user = user
         # передаем в поле товара нашей формы отфильтрованный товар
         form.instance.product = product 
         # super — перезагружает форму, нужен для работы

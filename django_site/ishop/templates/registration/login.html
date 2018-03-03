@@ -1,14 +1,27 @@
-<h2>Login</h2>
-<form method="post">  
-  {% csrf_token %} 
-  {{ form.as_p }} 
-  <button type="submit">Login</button>
-</form>
+<h2> my Shop </h2>
+{% if user.is_authenticated %} 
+  <p align="right"> Привет, <b>{{ user.username }}</b>! &emsp; <a href={% url 'logout' %}>Выйти</a></p>
+{% else %} 
+  <p align="right"> Вы не вошли в систему &emsp; <a href={% url 'login' %}>Войти</a></p>
+{% endif %}
+<hr align="left" width="100%" size="1" color="#808080" />
+Просмотреть <a href={% url 'products' %}>все товары</a> или по категориям: 
+{% for category in categories %}
+  <a href={% url 'one_category' category.id %}>{{category.title}}</a>
+{% endfor %} <br>
+<hr align="left" width="100%" size="1" color="#808080" />
+
 
 {% if user.is_authenticated %} 
-<p>Привет, {{ user.username }}!</p>
-<p><a href="{% url 'logout' %}">Выйти</a></p>
+  <p>Привет, <b>{{ user.username }}</b>! Пойдём, я покажу тебе что есть у нас в <a href={% url 'products' %}>магазине</a> </p>
+  <p><a href={% url 'logout' %}>Выйти</a></p>
 {% else %} 
-<p>You are not logged in.</p>
-<a href="{% url 'login' %}">Войти</a> 
+  <p>Вы не вошли в систему.</p>
+  <h4>Войти под своей учётной записью</h4>
+  <form method="post">  
+    {% csrf_token %} 
+    {{ form.as_p }} 
+    <button type="submit">Войти</button>
+  </form>
+  Если у вас ещё нет учётной записи, давайте  <a href={% url 'signup'%}>зарегистриуемся</a>, это просто
 {% endif %}

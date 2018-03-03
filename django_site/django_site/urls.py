@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.urls import path
 # импортируем наш файл views из products
 from ishop import views
+from django.conf.urls import include
 
 urlpatterns = [ 
     path('', views.IndexView.as_view(), name='index'), 
@@ -15,8 +16,7 @@ urlpatterns = [
     path('products/', views.ProductListView.as_view(), name='products'),
     path('categories/', views.CategoryListView.as_view(), name='categories'),
     path('one_category/<int:pk>/', views.OneCategoryView.as_view(), name='one_category'),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('signup/', views.SignUpView.as_view(), name='signup'),
     path('admin/', admin.site.urls,), 
 ]
-
-
-

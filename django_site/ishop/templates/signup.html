@@ -1,0 +1,6 @@
+<p><h4>Регистрация нового пользователя</h4></p>
+<form method="post">  
+  {% csrf_token %} 
+  {{ form.as_p }} 
+  <button type="submit">Готово</button>
+</form>

@@ -1,18 +1,17 @@
-<h1> my Shop </h1>
-
-<br><br>
-<p>
-
-Навигация по сайту:
-<a href={% url 'products' %}>  Все товары  |</a>
-<a href={% url 'index' %}>  Вернуться на главную</a><br> 
-Товары по категориям: 
+<h2> my Shop </h2>
+{% if user.is_authenticated %} 
+  <p align="right"> Привет, <b>{{ user.username }}</b>! &emsp; <a href={% url 'logout' %}>Выйти</a></p>
+{% else %} 
+  <p align="right"> Вы не вошли в систему &emsp; <a href={% url 'login' %}>Войти</a></p>
+{% endif %}
+<hr align="left" width="100%" size="1" color="#808080" />
+Просмотреть <a href={% url 'products' %}>все товары</a> или по категориям: 
 {% for category in categories %}
   <a href={% url 'one_category' category.id %}>{{category.title}}</a>
-{% endfor %}
-<br><br>
+{% endfor %} <br>
 
-
-<br>
-И пока ещё далеко да релиза, можно
-<a href={% url 'admin:index' %}> порулить админкой</a>
+{% if user.is_superuser %}
+<hr align="left" width="100%" size="1" color="#808080" />
+  <a href={% url 'product_create' %}>Добавить товар</a>&emsp;
+  <a href={% url 'admin:index' %}> В админку</a>
+{% endif %}

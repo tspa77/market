@@ -2,6 +2,9 @@
 from django.db import models
 from django.urls import reverse
 
+# from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm 
+
 # Создаем базовую модель нашего продукта
 class Product(models.Model):
     title = models.CharField(max_length=200) # и указываем максимальную длину
@@ -23,7 +26,8 @@ class Category(models.Model):
         return self.title
 
 class Order(models.Model): 
-    product = models.ForeignKey(Product, on_delete='CASCADE') 
+    product = models.ForeignKey(Product, on_delete='CASCADE')
+    user = models.ForeignKey('auth.User', on_delete='CASCADE', null=True)
     customer_name = models.CharField(max_length=200)
     customer_phone = models.CharField(max_length=200)
 

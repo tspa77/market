@@ -1,10 +1,16 @@
 <h2> my Shop </h2>
-<a href={% url 'products' %}>Все товары</a>
-или просмотреть товары по категориям: 
+{% if user.is_authenticated %} 
+  <p align="right"> Привет, <b>{{ user.username }}</b>! &emsp; <a href={% url 'logout' %}>Выйти</a></p>
+{% else %} 
+  <p align="right"> Вы не вошли в систему &emsp; <a href={% url 'login' %}>Войти</a></p>
+{% endif %}
+<hr align="left" width="100%" size="1" color="#808080" />
+
+Просмотреть <a href={% url 'products' %}>все товары</a> или по категориям: 
 {% for category in categories %}
   <a href={% url 'one_category' category.id %}>{{category.title}}</a>
 {% endfor %} <br>
-
+<hr align="left" width="100%" size="1" color="#808080" />
 
 <h3>Категория "{{category.title}}"</h3>
 <p>Здесь вы можете найти {{category.description}}</p>
@@ -14,7 +20,8 @@
   <p><a href={% url 'product_detail' product.id %}>{{product.title}}</a></p>
 {% endfor %}
 
-
-<br>
-И пока ещё далеко да релиза, можно
-<a href={% url 'admin:index' %}> порулить админкой</a>
+{% if user.is_superuser %}
+<hr align="left" width="100%" size="1" color="#808080" />
+  <a href={% url 'product_create' %}>Добавить товар</a>&emsp;
+  <a href={% url 'admin:index' %}> В админку</a>
+{% endif %}
