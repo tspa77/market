@@ -1,0 +1,7 @@
+<h1>Добавить новый товар</h1>
+{# action — ссылка куда отправляется запрос, method - метод запроса #}
+<form action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %} 
+  {{ form.as_p }} 
+<input type="submit" value="Подтвердить" /> 
+</form>

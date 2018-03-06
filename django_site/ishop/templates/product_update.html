@@ -1,0 +1,11 @@
+<h1>Редактируем инфорацию о товаре</h1>
+{# action — ссылка куда отправляется запрос, method - метод запроса #}
+<form action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %} 
+  {{ form.as_p }} 
+  <input type="submit" value="Обновить" /> 
+</form>
+
+<br><br>
+
+<button><a href={% url 'product_delete' product.id %}> Удалить продукт</a></button>

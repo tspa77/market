@@ -5,10 +5,20 @@
   <p align="right"> Вы не вошли в систему &emsp; <a href={% url 'login' %}>Войти</a></p>
 {% endif %}
 <hr align="left" width="100%" size="1" color="#808080" />
+
 Просмотреть <a href={% url 'products' %}>все товары</a> или по категориям: 
 {% for category in categories %}
   <a href={% url 'one_category' category.id %}>{{category.title}}</a>
 {% endfor %} <br>
+<hr align="left" width="100%" size="1" color="#808080" />
+
+<h3>Категория "{{category.title}}"</h3>
+<p>Здесь вы можете найти {{category.description}}</p>
+<br>
+
+{% for product in category.products.all %}
+  <p><a href={% url 'product_detail' product.id %}>{{product.title}}</a></p>
+{% endfor %}
 
 {% if user.is_superuser %}
 <hr align="left" width="100%" size="1" color="#808080" />

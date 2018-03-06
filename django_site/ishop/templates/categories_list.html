@@ -10,6 +10,14 @@
   <a href={% url 'one_category' category.id %}>{{category.title}}</a>
 {% endfor %} <br>
 
+<h3>Товары по категориям: </h3>
+
+{% for category in categories %} 
+  <h4><a href={% url 'one_category' category.id %}>{{category.title}}</a></h4>
+  <p>Описание: {{category.description}}</p>
+{% endfor %}
+
+<br>
 {% if user.is_superuser %}
 <hr align="left" width="100%" size="1" color="#808080" />
   <a href={% url 'product_create' %}>Добавить товар</a>&emsp;
