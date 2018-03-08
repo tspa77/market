@@ -1,24 +1,60 @@
-<h2> my Shop </h2>
-{% if user.is_authenticated %} 
-  <p align="right"> Привет, <b>{{ user.username }}</b>! &emsp; <a href={% url 'logout' %}>Выйти</a></p>
-{% else %} 
-  <p align="right"> Вы не вошли в систему. &emsp; <a href={% url 'login' %}>Войти</a></p>
-{% endif %}
-<hr align="left" width="100%" size="1" color="#808080" />
-Просмотреть <a href={% url 'products' %}>все товары</a> или по категориям: 
-{% for category in categories %}
-  <a href={% url 'one_category' category.id %}>{{category.title}}</a>
-{% endfor %} <br>
-<hr align="left" width="100%" size="1" color="#808080" />
+{% load static %}
+<html>
+    <head>
+      {% load bootstrap4 %}
+      {% bootstrap_javascript %}
+      {% bootstrap_css %}
+      <link rel="stylesheet" href="{% static 'css/shop.css' %}">
+      <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,cyrillic" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="page-header">
+            <h1><a href="/">my Shop</a></h1>
+        </div>
 
-<h3>Все товары: </h3>
-{% for product in products %} 
-  <h4><a href={% url 'product_detail' product.id %}>{{product.title}}</a></h4>
-  Категория: <a href={% url 'one_category' product.category.id %}>{{product.category}}</a> <br>
-{% endfor %} 
+      {% if user.is_authenticated %} 
+        <p align="right"> Привет, <b>{{ user.username }}</b>! &emsp; <a href={% url 'logout' %}>Выйти</a></p>
+      {% else %} 
+        <p align="right"> Вы не вошли в систему &emsp; <a href={% url 'login' %}>Войти</a></p>
+      {% endif %}
+      
+      <hr align="left" width="100%" size="1" color="#808080" />
+      
+      Просмотреть <a href={% url 'products' %}>все товары</a> или по категориям: 
+      
+      {% for category in categories %}
+        <a href={% url 'one_category' category.id %}>{{category.title}}</a>
+      {% endfor %} <br>
+      <hr align="left" width="100%" size="1" color="#808080" />
 
-{% if user.is_superuser %}
-<hr align="left" width="100%" size="1" color="#808080" />
-  <a href={% url 'product_create' %}>Добавить товар</a>&emsp;
-  <a href={% url 'admin:index' %}> В админку</a>
-{% endif %}
+        <div class="col">
+          <div class="row">
+              {% for product in products %}
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+              <div class="card">
+                <img class="card-img-top" src="{% if product.image %} {{ product.image.url }} {% else %} {% static "img/bolt.jpg"%} {% endif %} " class="img-responsive">
+                <div class="card-body">
+                <h4 class="card-title"><a href={% url 'product_detail' product.id %}>{{product.title}}</a></h4>
+                <p class="card-text">{{product.description}}.</p>
+                  <div class="row">
+                    <div class="col">
+                      <p align="center">{{product.price}} Рублей</p>
+                    </div>
+                    <div class="col">
+                        <p align="center"><a href={% url 'product_order' product.id %}>Заказать</a></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %} 
+          </div>
+        </div>
+
+      {% if user.is_superuser %}
+        <hr align="left" width="100%" size="1" color="#808080" />
+        <a href={% url 'product_create' %}>Добавить товар</a>&emsp;
+        <a href={% url 'admin:index' %}> В админку</a>
+      {% endif %}
+    </body>
+</html>

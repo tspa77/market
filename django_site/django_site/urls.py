@@ -6,6 +6,9 @@ from django.urls import path
 from ishop import views
 from django.conf.urls import include
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [ 
     path('', views.IndexView.as_view(), name='index'), 
     path('products/<int:pk>/', views.ProductDetail.as_view(), name='product_detail'),
@@ -20,3 +23,5 @@ urlpatterns = [
     path('signup/', views.SignUpView.as_view(), name='signup'),
     path('admin/', admin.site.urls,), 
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 

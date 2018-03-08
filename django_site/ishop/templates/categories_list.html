@@ -1,25 +1,44 @@
-<h2> my Shop </h2>
-{% if user.is_authenticated %} 
-  <p align="right"> Привет, <b>{{ user.username }}</b>! &emsp; <a href={% url 'logout' %}>Выйти</a></p>
-{% else %} 
-  <p align="right"> Вы не вошли в систему &emsp; <a href={% url 'login' %}>Войти</a></p>
-{% endif %}
-<hr align="left" width="100%" size="1" color="#808080" />
-Просмотреть <a href={% url 'products' %}>все товары</a> или по категориям: 
-{% for category in categories %}
-  <a href={% url 'one_category' category.id %}>{{category.title}}</a>
-{% endfor %} <br>
 
-<h3>Товары по категориям: </h3>
+{% load staticfiles %}
+<html>
+    <head>
+      {% load bootstrap4 %}
+      <script src="{% bootstrap_jquery_url %}"></script>
+      {% bootstrap_javascript %}
+      {% bootstrap_css %}
+      <link rel="stylesheet" href="{% static 'css/shop.css' %}">
+      <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,cyrillic" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="page-header">
+            <h1><a href="/">my Shop</a></h1>
+        </div>
 
-{% for category in categories %} 
-  <h4><a href={% url 'one_category' category.id %}>{{category.title}}</a></h4>
-  <p>Описание: {{category.description}}</p>
-{% endfor %}
+      {% if user.is_authenticated %} 
+        <p align="right"> Привет, <b>{{ user.username }}</b>! &emsp; <a href={% url 'logout' %}>Выйти</a></p>
+      {% else %} 
+        <p align="right"> Вы не вошли в систему &emsp; <a href={% url 'login' %}>Войти</a></p>
+      {% endif %}
+      
+      <hr align="left" width="100%" size="1" color="#808080" />
 
-<br>
-{% if user.is_superuser %}
-<hr align="left" width="100%" size="1" color="#808080" />
-  <a href={% url 'product_create' %}>Добавить товар</a>&emsp;
-  <a href={% url 'admin:index' %}> В админку</a>
-{% endif %}
+      Просмотреть <a href={% url 'products' %}>все товары</a> или по категориям: 
+      {% for category in categories %}
+        <a href={% url 'one_category' category.id %}>{{category.title}}</a>
+      {% endfor %} <br>
+
+      <h3>Товары по категориям: </h3>
+
+      {% for category in categories %} 
+        <h4><a href={% url 'one_category' category.id %}>{{category.title}}</a></h4>
+        <p>Описание: {{category.description}}</p>
+      {% endfor %}
+
+      <br>
+      {% if user.is_superuser %}
+      <hr align="left" width="100%" size="1" color="#808080" />
+        <a href={% url 'product_create' %}>Добавить товар</a>&emsp;
+        <a href={% url 'admin:index' %}> В админку</a>
+      {% endif %}
+    </body>
+</html>

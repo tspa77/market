@@ -4,15 +4,14 @@ from django.urls import reverse
 # импортируем модель для CBV
 from django.views import generic 
 # импортируем нашу модель
-from .models import Product
-from .models import Category
-from .models import Order
+from .models import Product, Category, Order
 
 from django.contrib.auth.forms import UserCreationForm 
 from django.urls import reverse_lazy 
 from django.views import generic
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 
 class SignUpView(generic.CreateView): 
     form_class = UserCreationForm 
