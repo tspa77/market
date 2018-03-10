@@ -11,6 +11,33 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+# DRF для API
+from rest_framework import generics, permissions
+from .serializers import ProductSerializer, CategorySerializer, OrderSerializer
+from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
+
+
+
+#class UserListAPI(generics.ListCreateAPIView):
+#    queryset = User.objects.all()
+#    serializer_class = UserSerializer
+    #lookup_fields = ('account', 'username')
+
+class ProductListAPI(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    # JSON формат выдачи по дефолту
+    # renderer_classes = (JSONRenderer, )
+    # доступ только админам:
+    # permission_classes = (permissions.IsAdminUser, )
+
+class CategoryListAPI(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class OrderListAPI(generics.ListCreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
 
 
 class SignUpView(generic.CreateView): 
@@ -19,16 +46,9 @@ class SignUpView(generic.CreateView):
     template_name = 'signup.html'
 
 # Стандартный вью — это обычная питон-функция
-def index(request):
-    return HttpResponse("This Is iShop")
-    
-class IndexView(generic.TemplateView): 
-    template_name = 'index.html'
-    
-    def get_context_data(self, **kwargs): 
-        context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
-        return context
+# def index(request):
+#     return HttpResponse("This Is iShop")
+
 
 class ProductDetail(generic.DetailView): 
     template_name = 'product_detail.html' 

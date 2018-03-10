@@ -1,61 +1,60 @@
-
-{% load staticfiles %}
+{% load static %}
 <html>
     <head>
       {% load bootstrap4 %}
-      <script src="{% bootstrap_jquery_url %}"></script>
       {% bootstrap_javascript %}
       {% bootstrap_css %}
       <link rel="stylesheet" href="{% static 'css/shop.css' %}">
       <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,cyrillic" rel="stylesheet" type="text/css">
     </head>
-    <body>
+<!-- Эмблема-->
         <div class="page-header">
-            <h1><a href="/">my Shop</a></h1>
-        </div>
-
+            <h1><a href="/products">my Shop</a></h1>
+        </div> <br>
+<!-- Логин-->
       {% if user.is_authenticated %} 
         <p align="right"> Привет, <b>{{ user.username }}</b>! &emsp; <a href={% url 'logout' %}>Выйти</a></p>
       {% else %} 
         <p align="right"> Вы не вошли в систему &emsp; <a href={% url 'login' %}>Войти</a></p>
       {% endif %}
-      
+<!-- Навбар-->
       <hr align="left" width="100%" size="1" color="#808080" />
-
       Просмотреть <a href={% url 'products' %}>все товары</a> или по категориям: 
-      {% for category in categories %}
-        <a href={% url 'one_category' category.id %}>{{category.title}}</a>
-      {% endfor %} <br>
+        {% for category in categories %}
+          <a href={% url 'one_category' category.id %}>{{category.title}}</a> &emsp;
+        {% endfor %} <br>
       <hr align="left" width="100%" size="1" color="#808080" />
+<!-- Конец шапки-->
 
       <h3>Категория "{{category.title}}"</h3>
-      <p>Здесь вы можете найти {{category.description}}</p>
-      <br>
-
+      <p>Здесь вы можете найти {{category.description}}</p> 
       <div class="col">
         <div class="row">
             {% for product in category.products.all %}
-          <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-            <div class="card">
-              <img class="card-img-top" src="{% if product.image %} {{ product.image.url }} {% else %} {% static "img/bolt.jpg"%} {% endif %} " class="img-responsive">
-              <div class="card-body">
-              <h4 class="card-title"><a href={% url 'product_detail' product.id %}>{{product.title}}</a></h4>
-              <p class="card-text">{{product.description}}.</p>
-                <div class="row">
-                  <div class="col">
-                    <p align="center">{{product.price}} Рублей</p>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+              <div class="card">
+                  <div class="block">
+                    <img src="{% if product.image %} {{ product.image.url }} {% else %} {% static "img/bolt.jpg"%} {% endif %}">
                   </div>
-                  <div class="col">
-                      <p align="center"><a href={% url 'product_order' product.id %}>Заказать</a></p>
-                  </div>
-                </div>
+                    <div class="card-body"> 
+                      <h5 class="card-title"><a href={% url 'product_detail' product.id %}>{{product.title}}</a></h5>
+                      <p class="card-text">{{product.description}}.</p>
+                      <div class="row">
+                          <div class="col">
+                            <p align="center"><b>{{product.price}} ₽</b></p>
+                          </div>
+                          <div class="col">
+                              <p align="center"><a href={% url 'product_order' product.id %}>Заказать</a></p>
+                          </div>
+                      </div>
+                    </div>
               </div>
             </div>
-          </div>
           {% endfor %} 
         </div>
       </div>
 
+<!-- Админская доп. панель-->
       {% if user.is_superuser %}
       <hr align="left" width="100%" size="1" color="#808080" />
         <a href={% url 'product_create' %}>Добавить товар</a>&emsp;

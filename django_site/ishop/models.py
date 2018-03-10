@@ -10,9 +10,8 @@ class Product(models.Model):
     title = models.CharField(max_length=200) # и указываем максимальную длину
     description = models.TextField(max_length=5000, blank=True)
     category = models.ForeignKey('Category', on_delete='CASCADE', null=True, related_name='products') 
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=0, default=0)
     image = models.ImageField(upload_to='images/%Y/%m/%d/', blank=True)
-
 
     def __str__(self):
         return self.title
@@ -28,8 +27,7 @@ class Category(models.Model):
         return self.title
 
 class Order(models.Model): 
-    product = models.ForeignKey(Product, on_delete='CASCADE')
-    user = models.ForeignKey('auth.User', on_delete='CASCADE', null=True)
+    product = models.ForeignKey(Product, on_delete='SET_NULL', null=True)
+    user = models.ForeignKey('auth.User', on_delete='SET_NULL', null=True)
     customer_name = models.CharField(max_length=200)
     customer_phone = models.CharField(max_length=200)
-

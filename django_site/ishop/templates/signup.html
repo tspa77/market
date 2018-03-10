@@ -1,26 +1,18 @@
-
-{% load staticfiles %}
+{% load static %}
 <html>
     <head>
       {% load bootstrap4 %}
-      <script src="{% bootstrap_jquery_url %}"></script>
       {% bootstrap_javascript %}
       {% bootstrap_css %}
       <link rel="stylesheet" href="{% static 'css/shop.css' %}">
       <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,cyrillic" rel="stylesheet" type="text/css">
     </head>
-    <body>
+<!-- Эмблема-->
         <div class="page-header">
-            <h1><a href="/">my Shop</a></h1>
-        </div>
+            <h1><a href="/products">my Shop</a></h1>
+        </div> <br>
+<!-- Конец шапки-->
 
-      {% if user.is_authenticated %} 
-        <p align="right"> Привет, <b>{{ user.username }}</b>! &emsp; <a href={% url 'logout' %}>Выйти</a></p>
-      {% else %} 
-        <p align="right"> Вы не вошли в систему &emsp; <a href={% url 'login' %}>Войти</a></p>
-      {% endif %}
-      
-      <hr align="left" width="100%" size="1" color="#808080" />
 
       <p><h3>Регистрация нового пользователя</h3></p>
       <form method="post">  

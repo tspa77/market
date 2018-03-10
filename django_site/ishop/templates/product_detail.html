@@ -1,45 +1,42 @@
 {% load static %}
-
 <html>
     <head>
       {% load bootstrap4 %}
-      <script src="{% bootstrap_jquery_url %}"></script>
       {% bootstrap_javascript %}
       {% bootstrap_css %}
       <link rel="stylesheet" href="{% static 'css/shop.css' %}">
       <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,cyrillic" rel="stylesheet" type="text/css">
     </head>
-    <body>
+<!-- Эмблема-->
         <div class="page-header">
-            <h1><a href="/">my Shop</a></h1>
-        </div>
-
+            <h1><a href="/products">my Shop</a></h1>
+        </div> <br>
+<!-- Логин-->
       {% if user.is_authenticated %} 
         <p align="right"> Привет, <b>{{ user.username }}</b>! &emsp; <a href={% url 'logout' %}>Выйти</a></p>
       {% else %} 
         <p align="right"> Вы не вошли в систему &emsp; <a href={% url 'login' %}>Войти</a></p>
       {% endif %}
-
+<!-- Навбар-->
       <hr align="left" width="100%" size="1" color="#808080" />
-
       Просмотреть <a href={% url 'products' %}>все товары</a> или по категориям: 
-      {% for category in categories %}
-        <a href={% url 'one_category' category.id %}>{{category.title}}</a>
-      {% endfor %} <br>
+        {% for category in categories %}
+          <a href={% url 'one_category' category.id %}>{{category.title}}</a> &emsp;
+        {% endfor %} <br>
       <hr align="left" width="100%" size="1" color="#808080" />
+<!-- Конец шапки-->
+
 
       <h3>{{product.title}}</h3>
       <p>Категория: <a href={% url 'one_category' product.category.id %}>{{product.category}}</a></p>
-      
       <img src="{% if product.image %} {{ product.image.url }} {% else %} {% static "img/bolt.jpg"%} {% endif %} ">
-      
       <p>Описание: {{product.description}}</p>
-      <p>Цена: {{product.price}} Рублей</p>
+      <p>Цена: <b>{{product.price}} ₽</b></p>
 
       <hr align="left" width="100%" size="1" color="#808080" />
-
       <a href={% url 'product_order' product.id %}>Заказать</a><br>
 
+<!-- Админская доп. панель-->
       {% if user.is_superuser %}
       <hr align="left" width="100%" size="1" color="#808080" />
         <a href={% url 'product_update' product.id %}>Отредактировать описание</a>&emsp;
