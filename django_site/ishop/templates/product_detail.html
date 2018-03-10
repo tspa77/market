@@ -26,7 +26,6 @@
       <hr align="left" width="100%" size="1" color="#808080" />
 <!-- Конец шапки-->
 
-
       <h3>{{product.title}}</h3>
       <p>Категория: <a href={% url 'one_category' product.category.id %}>{{product.category}}</a></p>
       <img src="{% if product.image %} {{ product.image.url }} {% else %} {% static "img/bolt.jpg"%} {% endif %} ">

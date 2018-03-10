@@ -13,7 +13,6 @@
         </div> <br>
 <!-- Конец шапки-->
 
-
       {% if user.is_authenticated %} 
         <p>Привет, <b>{{ user.username }}</b>! Пойдём, я покажу тебе что есть у нас в <a href={% url 'products' %}>магазине</a> </p>
         <p><a href={% url 'logout' %}>Выйти</a></p>
