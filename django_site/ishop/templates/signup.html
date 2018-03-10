@@ -13,14 +13,12 @@
         </div> <br>
 <!-- Конец шапки-->
 
-
       <p><h3>Регистрация нового пользователя</h3></p>
       <form method="post">  
         {% csrf_token %} 
         {{ form.as_p }} 
         <button type="submit">Готово</button>
       </form>
-
 
     </body>
 </html>

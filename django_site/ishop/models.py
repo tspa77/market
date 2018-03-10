@@ -27,7 +27,7 @@ class Category(models.Model):
         return self.title
 
 class Order(models.Model): 
-    product = models.ForeignKey(Product, on_delete='SET_NULL', null=True)
-    user = models.ForeignKey('auth.User', on_delete='SET_NULL', null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True)
     customer_name = models.CharField(max_length=200)
     customer_phone = models.CharField(max_length=200)
