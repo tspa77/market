@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/products/', views.ProductListAPI.as_view(), name='api_products_list'),
     path('api/categories/', views.CategoryListAPI.as_view(), name='api_categories_list'),
     path('api/orders/', views.OrderListAPI.as_view(), name='api_orders_list'),
+    path('api/users/', views.UserListAPI.as_view(), name='api_users_list'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 

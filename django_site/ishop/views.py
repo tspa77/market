@@ -13,15 +13,15 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # DRF для API
 from rest_framework import generics, permissions
-from .serializers import ProductSerializer, CategorySerializer, OrderSerializer
+from .serializers import ProductSerializer, CategorySerializer, OrderSerializer, UserSerializer
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 
+from django.contrib.auth.models import User
 
 
-#class UserListAPI(generics.ListCreateAPIView):
-#    queryset = User.objects.all()
-#    serializer_class = UserSerializer
-    #lookup_fields = ('account', 'username')
+class UserListAPI(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 class ProductListAPI(generics.ListCreateAPIView):
     queryset = Product.objects.all()
