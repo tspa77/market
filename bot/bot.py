@@ -11,29 +11,58 @@ def get_bot_updates(offset=None, timeout=30):
     return json_response["result"]
 
 # получаем json c сайта
-def get_shop_json(parametr):
-    api_response = requests.get(exchange_url + parametr)
-    json_response = api_response.json()
-    print(parametr, ' - Получили данные')
-    return json_response
+def get_shop_json(catalog, what):
+    if what == "/stat":
+        for key in catalog:
+            api_response = requests.get(exchange_url + catalog[key][0], auth=('bot', 'shopobot'))
+            catalog[key][1] = api_response.json()
+    else:
+        api_response = requests.get(exchange_url + catalog[what][0], auth=('bot', 'shopobot'))
+        catalog[what][1] = api_response.json()
+    return catalog
 
 # реакция на сообщение, выбор ответа и ответ
-def choice_answer(last_chat_text, last_chat_name, last_chat_id):
+def choice_answer(last_chat_text, last_chat_name, last_chat_id, catalog):
     # проверяем есть ли текст в словаре 
-    if last_chat_text in bot_answer:
-        parametr = (bot_answer[last_chat_text])
-        # если да - делаем запрос
-        results_site = get_shop_json(parametr)
-        quantity = len(results_site)
-        answer_text = ('В базе {} товаров').format(quantity)
-        for result_site in results_site:
-            # работа с текстом
-            product_id = result_site['id']
-            title = result_site['title']
-            answer_text += ('\n ID {}: {}').format(product_id, title)
-            
-            
+    if last_chat_text == '/stat':
+        send_answer(last_chat_id, 'Ожидайте, звоню управляющему.....')
+        catalog = get_shop_json(catalog, last_chat_text)
+        answer_text = ('На текущий момент в магазине:')
+        answer_text += (' \n {} товаров').format(len(catalog['/products'][1]))
+        answer_text += (' в {} категориях').format(len(catalog['/categories'][1]))
+        answer_text += ('\n {} пользователей').format(len(catalog['/users'][1]))
+        answer_text += (' и {} заказов').format(len(catalog['/orders'][1]))
 
+    elif last_chat_text == '/products':
+        catalog = get_shop_json(catalog, last_chat_text)
+        answer_text = ('На текущий момент в магазине:')
+        answer_text += (' \n {} товаров').format(len(catalog[last_chat_text][1]))
+        for product in catalog[last_chat_text][1]:
+            answer_text += (' \n ID {}:   {}').format(product['id'], product['title'])
+
+    elif last_chat_text == '/categories':
+        catalog = get_shop_json(catalog, last_chat_text)
+        answer_text = ('На текущий момент в магазине:')
+        answer_text += (' \n {} категорий').format(len(catalog[last_chat_text][1]))
+        for categories in catalog[last_chat_text][1]:
+            answer_text += (' \n ID {}:   {}').format(categories['id'], categories['title'])
+
+    elif last_chat_text == '/orders':
+        catalog = get_shop_json(catalog, last_chat_text)
+        answer_text = ('На текущий момент в магазине:')
+        answer_text += (' \n {} заказов').format(len(catalog[last_chat_text][1]))
+        
+        tovar = {}
+        for product in catalog['/products'][1]:
+            tovar.update({product['id']:product['title']})
+
+        for order in catalog[last_chat_text][1]:
+            answer_text += (' \nID {}: \nТовар:   {} \nКлиент:   {} \nТелефон:   {}'
+            '').format(order['id'], tovar[order['product']], order['customer_name'], order['customer_phone'])
+
+
+    elif last_chat_text == '/start':
+        answer_text = bot_answer['/start']
     # если нет
     else:
         answer_text = (bot_answer['unrecognized']).format(last_chat_name)
@@ -77,7 +106,7 @@ def main_module():
             print('{}  {}: {}'.format(last_msg_date, last_chat_name, last_chat_text))
 
             # реакция на сообщение, выбор ответа и сразу ответ
-            choice_answer(last_chat_text, last_chat_name, last_chat_id)
+            choice_answer(last_chat_text, last_chat_name, last_chat_id, catalog)
             
             # Вопрос-ответ отработаны. Обновляем оффсет, идём на новый заход вайла
             newoffset = last_update_id + 1
@@ -85,6 +114,8 @@ def main_module():
 
 # Закончились вспомогательные модули - Стартуем!
 print('Поехали! (с)  \n')
+
+catalog = get_shop_json(catalog, '/stat')
 
 if __name__ == '__main__':  
     try:
