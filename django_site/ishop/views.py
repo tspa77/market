@@ -22,14 +22,14 @@ from django.contrib.auth.models import User
 class UserListAPI(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    # доступ только админам:
+    permission_classes = (permissions.IsAdminUser, )
 
 class ProductListAPI(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # JSON формат выдачи по дефолту
     # renderer_classes = (JSONRenderer, )
-    # доступ только админам:
-    # permission_classes = (permissions.IsAdminUser, )
 
 class CategoryListAPI(generics.ListCreateAPIView):
     queryset = Category.objects.all()
@@ -38,7 +38,8 @@ class CategoryListAPI(generics.ListCreateAPIView):
 class OrderListAPI(generics.ListCreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-
+    # доступ только админам:
+    permission_classes = (permissions.IsAdminUser, )
 
 class SignUpView(generic.CreateView): 
     form_class = UserCreationForm 
