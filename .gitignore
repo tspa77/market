@@ -3,3 +3,6 @@ __pycache__/
 migrations/
 db.sqlite3
 media/
+token_key.py
+*.pyc
+*.pyo
